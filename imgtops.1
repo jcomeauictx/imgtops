@@ -1,0 +1,147 @@
+.TH IMGTOPS "1" "September 2003" "imgtops 1.0" "User Commands"
+.SH NAME
+imgtops \- convert images to PostScript
+.SH SYNOPSIS
+imgtops [options]... [filename(s)]...
+.SH DESCRIPTION
+This program reads one or more images in any of a wide variety of formats
+(including JPEG, PNG, GIF, Targa, TIFF, BMP, and many others) and
+produces a Encapsulated PostScript Level 2 or 3 file as
+output.  The goal is to produce the most space-efficient encoding of
+the image.
+.PP
+The files output will print only on PostScript devices
+supporting Level 2 features, but Level 2 has been around since 1991 so
+virtually all printers today support it.
+.PP
+If no input file is specified, \fBimgtops\fR reads from stdin.
+.PP
+The output of this program with no options will be a one-page
+PostScript document with the image centered on a US letter-size page
+with one-inch margins.  The file
+will contain a tight bounding box for the image and other necessary
+DSC comments to make the output a legal Encapsulated PostScript (EPS)
+file, suitable for inclusion in other documents.
+.SH OPTIONS
+.TP
+\fB\-?\fR, \fB\-\-help\fR
+Causes the program to show an option summary and usage information, then exit.
+.TP
+\fB\-\-version\fR
+Causes the program to show version and license information, then exit.
+.TP
+\fB\-e\fR, \fB\-\-strict\-eps\fR
+The normal output of \fBimgtops\fR is a page with a centered image.  The
+exact size and position depends on the various page size, image size,
+and margin parameters listed below.  The document always contains a tight
+EPS bounding box around the image, but since bounding boxes must have
+integral coordinates, there may be small slivers of empty page
+contained in the bounding box as well.  The \fB\-e\fR option makes the
+bounding box fit the image \fIexactly,\fR at the expense of centering
+it on the page.  These files are suitable only for EPS inclusion in
+other documents; parts of the image will likely be cut off if they are
+printed directly.  \fB\-e\fR causes the image size, page size, and page
+margin options to be ignered.   
+
+The summary is:  use \fB\-e\fR if you're only using the output file by
+including it in another document.  Don't use \fB\-e\fR if you want to
+print the output file by itself.
+.TP
+\fB\-w\fR, \fB\-\-width=\fR<dim>
+.TP
+\fB\-h\fR, \fB\-\-height=\fR<dim>
+Set the desired image width and height.  See the DIMENSIONS
+section below for legal dimension values.  If both of these options
+are given, the image may be scaled nonuniformly.  If the result does
+not fit on the page minus the margins, the image is scaled
+down to fit while maintaining its aspect ratio.  The default if
+neither is given is to make the image as large as possible.
+.TP
+\fB\-s\fR, \fB\-\-paper\-size\fR=\fISIZE\fR
+Set the output page size.  The size value may be "letter", "legal", or
+"a4" to select one of the builtin sizes, or it may be two dimensions
+(width and height) separated by a comma.
+.TP
+\fB\-m\fR, \fB\-\-margin=\fR<dim>
+Sets the size of the page margin.  The default is one inch.
+.TP
+\fB\-l\fR, \fB\-\-landscape\fR
+Rotates the image 90 degrees on the page.  This may be used in
+conjunction with \fB\-e\fR.
+.TP
+\fB\-2\fR, \fB\-\-level\-2\fR
+Forces all output to be Level 2 PostScript.  This is the default.  If
+both \fB\-3\fR and \fB\-2\fR are given, the one that appears last
+takes effect.
+.TP
+\fB\-3\fR, \fB\-\-level\-3\fR
+Allows the use of Level 3 PostScript features, which may result in
+smaller output files.
+.TP
+\fB\-8\fR, \fB\-\-allow\-8\-bit\fR
+By default the output file is 7-bit clean, containing only printable
+ASCII characters and whitespace.  This option allows arbitrary binary
+data to appear in the output, which reduces the size of the output
+file by about 20%.  However, some PostScript document managers (such as \fIgv\fR, as of this
+writing) choke on binary data.  For maximum portability of the
+resulting PostScript, do not use this option.
+.TP
+\fB\-x\fR, \fB\-\-hex\-encoding\fR
+Uses a hexadecimal encoding of binary data instead of the default
+ASCII85 encoding.  This option is primarily for debugging -- it
+results in an output file that is 60% larger, with no corresponding
+benefit.  This option has no effect if \fB\-8\fR is specified (since
+then the binary data is not encoded at all, but appears in the output file directly).
+.TP
+\fB\-n\fR, \fB\-\-line\-length=\fR#
+By default, ASCII-encoded data is broken into lines of 75 characters
+or less.  The \fB\-n\fR option changes that limit.  Setting it to zero
+or a negative value disables line breaking; the output will be one
+very long line.  This option effects only the image data portion of
+the output file.  The header of a typical output file contains lines
+of around 75 characters; \fB\-n\fR has no effect on these lines.  This
+option has no effect when \fB\-8\fR is specified.
+.TP
+\fB\-b\fR, \fB\-\-batch\fR
+In batch mode, \fBimgtops\fR accepts multiple input images and
+processes them all.  It outputs one file per image; the output
+filenames are constructed by replacing the input file's extension with
+".eps" (if \fB\-e\fR is used) or ".ps" (if it is not).  The \fB\-o\fR
+option can be used to specify the directory where the output files
+should be placed.
+
+At least one input image filename must be given; batch input images can not
+come from stdin.
+.TP
+\fB\-o\fR, \fB\-\-output\fR <filename>
+.TP
+\fB\-o\fR, \fB\-\-output\fR <dirname>
+Normally \fBimgtops\fR processes a single input image, and \fB\-o\fR
+is used to specify the output filename.  The default is stdout.
+
+In batch mode (selected with \fB\-b\fR), this option specifies a
+\fIdirectory\fR for the output files to go into; the filenames are
+constructed automatically from the input filenames.
+.TP
+\fB\-q\fR, \fB\-\-quiet\fR
+Normally \fBimgtops\fR prints a message to stderr as each input file
+is processed.  \fB\-q\fR suppresses all output to stderr, except for
+actual error messages.
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+The opposite of \fB\-q\fR, this causes additional information to be
+printed to stderr as the program runs.
+.SH DIMENSIONS
+Any option requiring a dimension may be given as a number followed by
+"in", "cm", "mm", "pt", "ft", or "m" to indicate the units.  A number
+given without units is assumed to be a distance in PostScript points
+(1/72-inch).
+.SH COPYRIGHT
+Copyright \(co 2003 Doug Zongker
+.br
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.
+.PP
+PostScript is a registered trademark of Adobe Systems Incorporated.
+

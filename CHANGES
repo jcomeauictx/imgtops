@@ -1,0 +1,25 @@
+version 1.0    :  4 Sep 2003
+
+   PIL's handling of paletted images changed in version 1.1.4; imgtops
+   now handles both the new and older versions.  Haven't run across
+   any major bugs since March, so we'll call it 1.0!
+	
+version 0.9.2  :  24 Mar 2003
+
+   imgtops handles most PIL image modes via conversion.  (Notably,
+   RGBA images are handled by dropping the alpha channel.)
+
+   ASCII data line lengths are limited to 75 characters by default.
+   Added -n option to change this.
+
+   Level 3 output files will now print on level 2 devices, but they
+   will show a grey box and a numeral '3' in place of the image.
+
+version 0.9.1  :   2 Mar 2003
+
+   Added rotation option to epstoimg.  Changed short form of
+   "resolution" option to "-s".
+
+version 0.9    :  22 Feb 2003
+
+   First released version.

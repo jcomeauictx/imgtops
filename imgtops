@@ -1,0 +1,9 @@
+#!/usr/bin/python
+
+from imgtopslib import imgtops
+import sys
+try:
+    imgtops.main()
+except KeyboardInterrupt:
+    sys.exit(1)
+

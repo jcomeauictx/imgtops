@@ -1,0 +1,109 @@
+.TH EPSTOIMG "1" "September 2003" "epstoimg 1.0" "User Commands"
+.SH NAME
+epstoimg \- create bitmap images from PostScript
+.SH SYNOPSIS
+epstoimg [options]... <filename>
+.SH DESCRIPTION
+This program uses the Ghostscript interpreter
+(http://www.ghostscript.com/) to produce bitmap images from PostScript
+language files.  The image shows the area within the bounding box, if
+the input file contains one, otherwise it shows the entire page.
+Multipage documents are supported.
+.SH OPTIONS
+.TP
+\fB\-?\fR, \fB\-\-help\fR
+Causes the program to show an option summary and usage information, then exit.
+.TP
+\fB\-\-version\fR
+Causes the program to show version and license information, then exit.
+.TP
+\fB\-w\fR, \fB\-\-width=\fR#
+.TP
+\fB\-h\fR, \fB\-\-height=\fR#
+Sets the size of the output image, in pixels.  This will be the total
+size of the image including any padding.  If only one is given, the
+other is calculated using the EPS bounding box, or the page size if no
+bounding box is specified.  If neither is specified, the output image
+is sized to have one pixel per PostScript point in the input, plus any
+padding.
+.TP
+\fB\-m\fR, \fB\-\-margin=\fR<dim>
+If a bounding box is specified in the input file, it is padded by this
+length on all sides before the file is rendered.  This value may be
+negative, so long as the resulting box is nondegenerate.
+
+The length is given as a number followed by
+"in", "cm", "mm", "pt", "ft", or "m" to indicate the units.  A number
+given without units is assumed to be a distance in PostScript points
+(1/72-inch).
+.TP
+\fB\-p\fR, \fB\-\-padding=\fR#
+After rendering, the output image can be padded on all sides by a border
+of white pixels.  The default is zero pixels (no padding).
+.TP
+\fB\-b\fR, \fB\-\-black\fR
+This causes the \fB\-p\fR option to pad with black rather than white.
+.TP
+\fB\-r\fR, \fB\-\-rotation=\fR#
+This rotates the output image by the given (integral) number of
+counter-clockwise quarter turns.  The value may be negative.
+\fBepstoimg\fR searches the input file for the first valid
+\fB%%Orientation:\fR or \fB%%PageOrientation:\fR comment to set the
+orientation of the page; the value of this option is applied relative
+to that default.
+
+The width and height of the output, if
+specified, are applied after rotation (so \fB\-w 600\fR produces a
+600-pixel wide image regardless of the page's orientation).
+.TP
+\fB\-s\fR, \fB\-\-resolution=\fR<res>
+This option controls the resolution (in DPI) of the Ghostscript
+interpreter.  Normally \fBepstoimg\fR sets this automatically based on
+the desired output size and input bounding box, if any, but this
+option can be used to override the default value.  The resolution may
+be a single number, or two numbers joined by a letter 'x' to specify
+different resolutions in X and Y.  Low values will produce
+fast, lower-quality output; higher values may result in nicer output
+at the expense of processing time.
+.TP
+\fB\-g\fR, \fB\-\-grayscale\fR
+Converts the image to grayscale before saving.
+.TP
+\fB\-o\fR, \fB\-\-output=\fR<filename>
+Sets the output filename.  The default is to write to stdout.  At
+least one of \fB\-o\fR or \fB\-f\fR must be given.  If only \fB\-o\fR
+is given, the output format is determined from the file extension.
+
+If the input contains multiple pages, then a four-digit page number is
+inserted before the extension.  Thus, "\-o foo.png" will actually
+produce output files "foo.0001.png", "foo.0002.png", etc.  If the
+input is just a single page, the output filename is used unchanged.
+.TP
+\fB\-f\fR, \fB\-\-format\fR=\fIFMT\fR
+Sets the output image format.  Valid values are: "BMP", "GIF", "JPEG", "PCX",
+"PNG", "PPM", "TIFF".  This overrides the format inferred from the
+filename extension given with \fB\-o\fR, if any.
+.TP
+\fB\-i\fR, \fB\-\-interpreter=\fR<gs>
+This specifies the location of the Ghostscript interpreter.  If the
+first character is a '+', then the directories in the PATH environment variable are
+searched for the remainder of the string and the first match is used.
+The default value is set at install time.
+.TP
+\fB\-q\fR, \fB\-\-quiet\fR
+Normally \fBepstoimg\fR prints a message to stderr as each page of the
+input file is processed.  \fB\-q\fR suppresses all output to stderr,
+except for actual error messages.
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+The opposite of \fB\-q\fR, this causes additional information to be
+printed to stderr as the program runs.
+.SH COPYRIGHT
+Copyright \(co 2003 Doug Zongker
+.br
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.
+.PP
+PostScript is a registered trademark of Adobe Systems Incorporated.
+

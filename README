@@ -1,0 +1,65 @@
+This package contains the imgtops and epstoimg utilities.  This is
+version 1.0; you should always be able to find the latest version at
+
+  http://imgtops.sourceforge.net/
+
+imgtops converts a wide variety of bitmap image formats (jpg, png,
+gif, tif, bmp, and others) into Encapsulated PostScript documents,
+using PostScript languagelevel 2 and 3 features to minimize the size
+of the resulting output files.
+
+epstoimg uses the free Ghostscript interpreter to produce bitmap
+images from PostScript source files.  Either PS or EPS files may be
+used as input; the "e" in the program name is to avoid a conflict with
+another, similar utility.
+
+Both programs require:
+
+ - Python 2.2 or higher -- http://www.python.org/
+ - the Python Imaging Library -- http://www.pythonware.com/products/pil/
+
+epstoimg also requires:
+
+ - Ghostscript -- http://www.ghostscript.com/
+
+ 
+
+
+INSTALLATION
+------------
+
+Start the installation by typing:
+
+   python setup.py install
+
+and follow the prompts.  If you don't have a C compiler, you
+can install a pure Python implementation by typing:
+
+   python setup-pure.py install
+
+instead.  The pure version of imgtops can be significantly slower,
+depending on the image and options selected.  (epstoimg is
+unaffected.)
+
+Once installed, the imgtops and epstoimg man pages give instructions
+on using the programs.
+
+
+
+FEEDBACK
+--------
+
+Send me some.
+
+  Doug Zongker
+  dzongker@sourceforge.net
+
+
+
+
+COPYING	
+-------
+
+See the file "LICENSE", included in this distribution.
+
+
